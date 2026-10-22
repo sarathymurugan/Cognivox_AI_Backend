@@ -1,0 +1,5 @@
+timestamp,participant_id,saved_filename,language,task_type,age,gender,mmse_score,clinical_label
+2026-10-16T09:30:10,001,001_english_picture_description_20261016_093009.wav,en,picture_description,60,male,,control
+2026-10-16T09:46:58,001,001_english_picture_description_20261016_094658.wav,en,picture_description,60,male,,control
+2026-10-21T15:07:59,001,001_english_picture_description_20261021_150759.wav,en,picture_description,60,male,50.0,mci
+2026-10-21T15:08:51,002,002_tamil_picture_description_20261021_150851.wav,ta,picture_description,50,female,60.0,control
