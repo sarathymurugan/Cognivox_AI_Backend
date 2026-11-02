@@ -130,19 +130,36 @@ def load_and_preprocess_audio(file_path: str, trim_silence: bool = True):
         mono=True
     )
 
-    if len(audio) == 0:
+    if len(audio) == 0 or sample_rate <= 0:
         raise HTTPException(
             status_code=400,
             detail="Uploaded audio file is empty."
         )
 
-    # Trim only leading and trailing dead air (top_db=30) so internal pauses remain intact
-    if trim_silence:
-        trimmed_audio, _ = librosa.effects.trim(audio, top_db=30)
-        if len(trimmed_audio) > 0:
-            audio = trimmed_audio
+    # 1. RAW SILENCE GATE (Before normalization amplifies background noise!)
+    raw_peak = float(np.max(np.abs(audio)))
+    raw_rms = float(np.sqrt(np.mean(audio ** 2)))
 
-    # Peak-normalize audio so microphone distance doesn't skew RMS energy
+    if raw_peak < 0.015 or raw_rms < 0.002:
+        raise HTTPException(
+            status_code=400,
+            detail="No voice detected in recording (audio is silent or too quiet). Please speak clearly into the microphone."
+        )
+
+    # 2. Trim leading and trailing silence (top_db=25)
+    if trim_silence:
+        trimmed_audio, _ = librosa.effects.trim(audio, top_db=25)
+        trimmed_duration = len(trimmed_audio) / sample_rate
+
+        # Reject if active sound after trimming is shorter than 1.5 seconds
+        if trimmed_duration < 1.5:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Insufficient speech detected ({trimmed_duration:.1f}s of sound). Please record at least 3 seconds of continuous speech."
+            )
+        audio = trimmed_audio
+
+    # 3. Safe Peak Normalization (only runs after confirming real speech exists)
     max_val = np.max(np.abs(audio))
     if max_val > 0:
         audio = audio / max_val

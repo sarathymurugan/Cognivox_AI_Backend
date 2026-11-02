@@ -4,3 +4,7 @@ timestamp,session_id,filename,task_type,detected_language,age,gender,mci_risk_sc
 2026-10-21T12:24:32,ae59901a,Copy of copy_of_taukdial-002-1.wav,picture_description,en,60,male,59.0,Moderate Risk (Stress-Induced Cognitive Drift),26.09,3.56,0.017205062776113347,0.0870464415116182,1.83,13.46,0.4098
 2026-10-21T12:39:37,6c409c81,recording_1792566564905.webm,narrative,en,,,93.3,High Risk (Early MCI Indicators),81.29,2.18,,,0.0,0.0,0.0
 2026-10-21T14:40:15,635d2a51,Copy of copy_of_taukdial-005-1.wav,picture_description,en,,,52.0,Moderate Risk (Stress-Induced Cognitive Drift),46.45,4.08,0.02108169639897463,0.08576229881517658,4.09,11.11,0.5263
+2026-10-24T10:11:17,1d838cfe,recording_1792816814888.webm,picture_description,nn,,,92.0,High Risk (Early MCI Indicators),88.82,0.72,,,0.0,0.0,0.0
+2026-10-24T14:04:35,02ccdf39,Copy of copy_of_taukdial-005-1.wav,picture_description,en,50,male,52.0,Moderate Risk (Stress-Induced Cognitive Drift),46.47,4.08,0.02136808559185962,0.08713584856689148,4.09,11.11,0.5263
+2026-10-24T14:07:27,0cbe0686,Copy of copy_of_taukdial-002-1.wav,picture_description,en,40,female,59.0,Moderate Risk (Stress-Induced Cognitive Drift),26.09,3.56,0.017205062776113347,0.0870464415116182,2.34,13.38,0.4114
+2026-10-24T15:22:26,6ef5e9cd,Copy of copy_of_taukdial-002-1.wav,picture_description,en,,,59.0,Moderate Risk (Stress-Induced Cognitive Drift),26.09,3.56,0.017205062776113347,0.0870464415116182,2.34,13.38,0.4114

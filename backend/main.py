@@ -389,10 +389,29 @@ async def analyze_audio_endpoint(
         # 3. Run Whisper Bilingual ASR (Tamil / English)
         transcription_result = transcribe_audio_bilingual(file_path, preferred_language=language)
 
+        # --- PROTECTIVE SPEECH PRESENCE GATE ---
+        # Reject blank/noise recordings where no words were spoken or no vocal cords vibrated
+        spoken_text = (transcription_result.get("transcript") or "").strip()
+        voiced_pct = acoustic_features.get("pitch", {}).get("voiced_percentage") or 0.0
+        speech_sec = acoustic_features.get("speech_rate", {}).get("estimated_speech_duration_seconds") or 0.0
+        jitter_val = acoustic_features.get("jitter_shimmer", {}).get("jitter")
+
+        if (
+            (transcription_result.get("available") and len(spoken_text) == 0)
+            or voiced_pct < 15.0
+            or speech_sec < 1.0
+            or jitter_val is None
+        ):
+            raise HTTPException(
+                status_code=400,
+                detail="No clear human speech detected in the recording. Please speak clearly into the microphone for at least 3–5 seconds and try again."
+            )
+
         # 4. Extract Bilingual Linguistic Biomarkers (Fillers, Pronouns, Lexical Diversity)
         linguistic_features = extract_linguistic_biomarkers(
             transcript=transcription_result["transcript"],
-            language=transcription_result["detected_language"]
+            language=transcription_result["detected_language"],
+            duration_seconds=audio_info["duration_seconds"]
         )
 
         # 5. Deep Learning Forward Pass (Figure 1 BiLSTM + CNN + Attention Fusion)
